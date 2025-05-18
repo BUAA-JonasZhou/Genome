@@ -1,0 +1,6 @@
+This is a guideline for acquiring the species descriptor of our research. 
+First, download the proteome file (.faa) of interested species from ncbi.
+Second, upload the fasta file into TreeGrafter software (https://github.com/pantherdb/TreeGrafter), TreeGrafter will give the annotated result of proteom, 
+transfer the result into .csv, then extract the name column (NAME: xx) .
+In the Gene list analysis module of the Panther website （https://www.pantherdb.org）, enter the extracted Name list in the enter IDs input box and click submit to obtain the gene 
+function distribution of the specie.
