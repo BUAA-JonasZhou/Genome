@@ -10,7 +10,7 @@ import random
 from sklearn import svm
 from sklearn.preprocessing import StandardScaler
 
-#定义作为结果的图像
+
 def scatter_loss_plot():
     plt.subplot(1,2,1)
     plt.ylim(-1,1)
@@ -22,8 +22,7 @@ def scatter_loss_plot():
     plt.ylim(-1,1)
     plt.xlim(-1,1)
     plt.plot(y_train[colnames[0]],y_train_pred[0],'.')
-
- #定义均方根误差   
+  
 def rmse(obs,pre):
     return np.sqrt(mean_squared_error(obs, pre))
     
