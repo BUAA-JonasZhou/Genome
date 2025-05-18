@@ -14,7 +14,7 @@ from tqdm import tqdm,trange
 import xlrd
 import openpyxl
 
-def write_result(t):#定义写入结果函数
+def write_result(t):
     pd.DataFrame(train.history).to_excel(writer,startcol=5*t,sheet_name='loss&mae')
     pd.DataFrame(globals()['r_test_'+colnames[0]]).to_excel(writer,startcol=68*t,sheet_name='cor&score')
     pd.DataFrame(globals()['r_test_'+colnames[1]]).to_excel(writer,startcol=68*t+3,sheet_name='cor&score')
