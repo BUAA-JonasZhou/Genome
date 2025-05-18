@@ -55,26 +55,20 @@ def scatter_loss_plot():
     plt.subplot(2,3,6)
     plt.plot(train.history['val_loss'],'-')    
     
-def Network_train(opt,Setlr,dlcs,sjsl,nepochs):#神经网络训练，自定义：优化器选择opt，学习率setlr，动量dlcs，学习率衰减值sjsl
-    global train,score#全局变量
-    Adam=optimizers.Adam(lr=Setlr, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=sjsl, amsgrad=True)#定义Adam优化器
-    sgd=optimizers.SGD(lr=Setlr, momentum=dlcs, decay=sjsl, nesterov=False)#定义SGD（随机梯度下降）优化器
-    Adagrad=optimizers.Adagrad(lr=Setlr, epsilon=1e-06)#定义Adagrad优化器
-    model.compile(optimizer=opt,loss='mean_squared_error', metrics=['mae'])#配置训练模型：定义优化器，损失函数和模型评估标准
-    #train=model.fit(x_data.iloc[train_index,:],y_data.iloc[train_index,:],
-                    #validation_data=(x_val,y_val),epochs=nepochs,batch_size=16)
-    train=model.fit(x_train,y_train,validation_split=0.11,epochs=nepochs,batch_size=16,verbose=1)#以给定数量的轮次训练模型，训练模型迭代轮次nepochs
-    score=model.evaluate(x_test,y_test,batch_size=16)#在测试模式下返回模型的误差值和评估标准值，batch_size：每次评估的样本数
+def Network_train(opt,Setlr,dlcs,sjsl,nepochs):
+    global train,score
+    Adam=optimizers.Adam(lr=Setlr, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=sjsl, amsgrad=True)
+    sgd=optimizers.SGD(lr=Setlr, momentum=dlcs, decay=sjsl, nesterov=False)
+    Adagrad=optimizers.Adagrad(lr=Setlr, epsilon=1e-06)
+    model.compile(optimizer=opt,loss='mean_squared_error', metrics=['mae'])
+    train=model.fit(x_train,y_train,validation_split=0.11,epochs=nepochs,batch_size=16,verbose=1)
+    score=model.evaluate(x_test,y_test,batch_size=16)
 
 def Set_network(n_hide,n_input):
     global model
-    model=Sequential()#创建一个sequential模型
-    model.add(Dense(input_dim=n_input,units=n_hide,kernel_initializer='normal',activation='relu'))#添加全连接层
-    #input_dim：输入尺寸，units：输出尺寸，kernel_initializer normal：正态分布随机初始化激活，函数relu：整流线性单元，返回逐元素的max（x，0）
-    model.add(Dropout(0.2))#Dropout 包括在训练中每次更新时， 将输入单元的按比率随机设置为 0， 这有助于防止过拟合。此处rate=0.2 
-    #model.add(PReLU(alpha_initializer='zeros', alpha_regularizer=None, alpha_constraint=None, shared_axes=None))
-    #model.add(Dense(input_dim=n_hide,units=1,kernel_initializer='normal'))
-    #model.add(LeakyReLU(alpha=1))
+    model=Sequential()
+    model.add(Dense(input_dim=n_input,units=n_hide,kernel_initializer='normal',activation='relu'))
+    model.add(Dropout(0.2))
 
 def rmse(obs,pre):
     return np.sqrt(mean_squared_error(obs, pre))
@@ -98,16 +92,16 @@ x_train,x_test,y_train,y_test=train_test_split(x_data,y_data,test_size=0.2,rando
 x_train,x_val,y_train,y_val=train_test_split(x_train,y_train,test_size=0.25,random_state=1234)
 colnames=y_data.columns.values.tolist()
 
-#将predict表中的数据写入predf中
+#import data
 file1='Standard_Genome.xlsx'
 wb1=xlrd.open_workbook(filename=file1)
-ws1=wb1.sheet_by_name('Sheet1')#定义ws1为wb1的sheet1
+ws1=wb1.sheet_by_name('Sheet1')
 predictdata=[]
 for i in range(ws1.nrows):
     col=[]
     for j in range(ws1.ncols):
         col.append(ws1.cell(i,j).value)
-    predictdata.append(col)#添加预测数据
+    predictdata.append(col)#add predict data
 predf=pd.DataFrame(predictdata[1:],columns=predictdata[0],dtype='float64')
 
 ss=ShuffleSplit(n_splits=10, test_size=0.1,random_state=0)
