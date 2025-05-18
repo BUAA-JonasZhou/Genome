@@ -24,7 +24,7 @@ stds_Metoxy=np.zeros(2)
 xl = pd.ExcelFile('Standard_Genome.xlsx')
 namelist=xl.sheet_names[0]
 frame=pd.read_excel('Standard_Genome.xlsx')
-model_index=list(frame.index)#将frame转变为列表
+model_index=list(frame.index)
 frame=frame.loc[model_index,:]
 X_full=frame.iloc[:,0:18]
     #x_data=frame[globals()['colindex'+str(i)]]
@@ -52,8 +52,9 @@ def get_scores_for_imputer(imputer, X_missing, y_missing):
     )
     return impute_scores
 
+#Missing value imputation
 def get_impute_knn_score(X_missing,y_missing):
-    imputer=KNNImputer(missing_values=np.nan, add_indicator=True)#填充缺失值
+    imputer=KNNImputer(missing_values=np.nan, add_indicator=True)#
     n_samples, n_features = X_full.shape
     knn_impute_scores = get_scores_for_imputer(imputer, X_missing, y_missing)
     return knn_impute_scores.mean(), knn_impute_scores.std()
